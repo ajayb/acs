@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTransactionsTable extends Migration {
+class CreateHydroElectricTable extends Migration {
 
     /**
      * Run the migrations.
@@ -12,24 +12,22 @@ class CreateTransactionsTable extends Migration {
      */
     public function up()
     {
-        Schema::create('transactions', function(Blueprint $table)
+        Schema::create('hydro_electric', function(Blueprint $table)
         {
             $table->increments('id');
             $table->integer('project_id')->unsigned();
-            $table->string('amount', 30);
-            $table->string('dolar_value', 30);
-            $table->integer('buyer_id')->unsigned();
-            $table->integer('seller_id')->unsigned(); 
-            $table->string('type', 20);
+            $table->string('production', 50);
+            $table->string('unit', 50);
+            $table->string('generator_number', 50);
+            $table->string('generator_serial_number', 50);
+            $table->dateTime('reading_time');
             $table->integer('created_by')->unsigned();
             $table->timestamps();
         });
 
-        Schema::table('transactions', function($table)
+        Schema::table('hydro_electric', function($table)
         {
             $table->foreign('project_id')->references('id')->on('projects');
-            $table->foreign('buyer_id')->references('id')->on('customers');
-            $table->foreign('seller_id')->references('id')->on('customers');
             $table->foreign('created_by')->references('id')->on('users');
         });
     }
@@ -41,7 +39,7 @@ class CreateTransactionsTable extends Migration {
      */
     public function down()
     {
-        Schema::drop('transactions');
+        Schema::drop('hydro_electric');
     }
 
 }

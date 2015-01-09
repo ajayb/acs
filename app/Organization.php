@@ -27,4 +27,11 @@ class Organization extends Model {
      */
     protected $hidden = ['id'];
 
+    public function getAll()
+    {
+
+        $results = Organization::orderBy('name')->get();
+        return $results;
+    }
+
 }

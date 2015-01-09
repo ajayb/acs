@@ -27,4 +27,9 @@ class Roles extends Model {
      */
     protected $hidden = ['id'];
 
+    public function users()
+    {
+        return $this->belongsTo('Users');
+    }
+
 }

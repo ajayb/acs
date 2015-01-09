@@ -41,11 +41,12 @@ class Authenticate implements Middleware {
 			}
 			else
 			{
-				return redirect()->guest('auth/login');
+				return redirect()->guest('user/login');
 			}
 		}
 
-		return $next($request);
+		//return $next($request);
+                return redirect()->guest('dashboard');
 	}
 
 }

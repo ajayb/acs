@@ -17,23 +17,18 @@ class CreateCustomersTable extends Migration {
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('organization_id')->unsigned();
-            $table->string('name', 50);
-            $table->string('email', 80)->unique();
-            $table->string('address', 100)->nullable();
-            $table->string('city', 50)->nullable();
-            $table->string('state', 50)->nullable();
-            $table->string('country', 50)->nullable();
-            $table->string('zip_code', 15)->nullable();
-            $table->string('phone', 15)->nullable();
-            $table->string('fax', 15)->nullable();
+            $table->string('name', 50); 
+            $table->string('type', 50);
+            $table->boolean('is_non_profit')->default(0);
             $table->boolean('status')->default(1);
-            $table->timestamps();
-            $table->softDeletes();
+            $table->integer('created_by')->unsigned();
+            $table->timestamps();           
         });
         
         Schema::table('customers', function($table)
         {
             $table->foreign('organization_id')->references('id')->on('organization');
+            $table->foreign('created_by')->references('id')->on('users');
         });
     }
 

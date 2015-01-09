@@ -7,14 +7,16 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'CreateCustomersTable' => $baseDir . '/database/migrations/2014_12_31_082220_create_customers_table.php',
+    'CreateHydroElectricTable' => $baseDir . '/database/migrations/2015_01_05_085559_create_hydro_electric_table.php',
     'CreateOrganizationTable' => $baseDir . '/database/migrations/2014_12_30_103721_create_organization_table.php',
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_12_31_100000_create_password_resets_table.php',
+    'CreatePhotovoltaicTable' => $baseDir . '/database/migrations/2015_01_05_085539_create_photovoltaic_table.php',
     'CreateProgramTable' => $baseDir . '/database/migrations/2014_12_31_082231_create_program_table.php',
     'CreateProjectsTable' => $baseDir . '/database/migrations/2014_12_31_082241_create_projects_table.php',
-    'CreateRolesTable' => $baseDir . '/database/migrations/2014_12_31_082257_create_roles_table.php',
+    'CreateRolesTable' => $baseDir . '/database/migrations/2014_12_30_082257_create_roles_table.php',
     'CreateTransactionsTable' => $baseDir . '/database/migrations/2014_12_31_082249_create_transactions_table.php',
-    'CreateUserRolesTable' => $baseDir . '/database/migrations/2014_12_31_082306_create_user_roles_table.php',
     'CreateUsersTable' => $baseDir . '/database/migrations/2014_12_31_000000_create_users_table.php',
+    'CreateWindElectricalTable' => $baseDir . '/database/migrations/2015_01_05_085550_create_wind_electrical_table.php',
     'DatabaseSeeder' => $baseDir . '/database/seeds/DatabaseSeeder.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/File/Iterator.php',
     'File_Iterator_Facade' => $vendorDir . '/phpunit/php-file-iterator/File/Iterator/Facade.php',
@@ -387,6 +389,7 @@ return array(
     'PHP_Token_WHITESPACE' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
     'PHP_Token_XOR_EQUAL' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
     'PHP_Token_YIELD' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
+    'RolesSeeder' => $baseDir . '/database/seeds/RolesSeeder.php',
     'SebastianBergmann\\Comparator\\ArrayComparator' => $vendorDir . '/sebastian/comparator/src/ArrayComparator.php',
     'SebastianBergmann\\Comparator\\Comparator' => $vendorDir . '/sebastian/comparator/src/Comparator.php',
     'SebastianBergmann\\Comparator\\ComparisonFailure' => $vendorDir . '/sebastian/comparator/src/ComparisonFailure.php',
@@ -425,4 +428,5 @@ return array(
     'SessionHandlerInterface' => $vendorDir . '/symfony/http-foundation/Symfony/Component/HttpFoundation/Resources/stubs/SessionHandlerInterface.php',
     'TestCase' => $baseDir . '/tests/TestCase.php',
     'Text_Template' => $vendorDir . '/phpunit/php-text-template/Text/Template.php',
+    'UserSeeder' => $baseDir . '/database/seeds/UserSeeder.php',
 );

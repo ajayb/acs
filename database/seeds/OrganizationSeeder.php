@@ -11,16 +11,18 @@ class OrganizationSeeder extends Seeder {
         Organization::truncate();
         // add 1st row
         Organization::create([
-            'name'     => 'University of Test',
-            'email'    => 'testmili@gmail.com',
-            'address'  => '',
-            'city'     => '',
-            'state'    => '',
-            'country'  => 'USA',
-            'zip_code' => '',
-            'phone'    => '',
-            'fax'      => '',
-            'status'   => '1'
-        ]);       
+            'id'         => 1,
+            'name'       => 'Adaptive Carbonsy Stems',
+            'email'      => 'adaptivecarbonsystems@gmail.com',
+            'address'    => '',
+            'city'       => '',
+            'state'      => '',
+            'country'    => 'USA',
+            'zip_code'   => '',
+            'status'     => 1,
+            'created_at' => new DateTime,
+            'updated_at' => new DateTime
+        ]);
     }
+
 }
