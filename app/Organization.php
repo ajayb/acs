@@ -32,6 +32,6 @@ class Organization extends Model {
 
         $results = Organization::orderBy('name')->get();
         return $results;
-    }
+    }      
 
 }

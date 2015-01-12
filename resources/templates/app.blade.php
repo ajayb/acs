@@ -78,7 +78,7 @@
         <script type="text/javascript" src="/js/vendor/bootstrap.js"></script>        
         <script type="text/javascript" src="/js/vendor/moment.min.js"></script>
         <script type="text/javascript" src="/js/vendor/bootstrap-datetimepicker.js"></script>        
-        <script type="text/javascript" src="/js/vendor/bootstrap-typeahead.js"></script>
+        <script type="text/javascript" src="/js/vendor/bootstrap3-typeahead.js"></script>
         <script type="text/javascript" src="/js/vendor/jquery.validate.js"></script>
         <script type="text/javascript" src="/js/acs.js"></script>
     </body>

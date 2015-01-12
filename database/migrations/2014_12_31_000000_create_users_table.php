@@ -43,7 +43,7 @@ class CreateUsersTable extends Migration {
         Schema::table('users', function(Blueprint $table)
         {
             $table->dropForeign('users_organization_id_foreign');
-            $table->dropForeign('users_roles_id_foreign');
+            $table->dropForeign('users_role_id_foreign');
         });
 
         Schema::drop('users');

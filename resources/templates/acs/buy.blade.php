@@ -1,5 +1,6 @@
 <form class="form-horizontal fv-form fv-form-bootstrap" method="post" name="buyCarbonForm" id="buyCarbonForm" >   
     <input type="hidden" id="_token" name="_token" value="{{csrf_token()}}">
+    <input type="hidden" id="addType" name="addType" value="buy">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title">Buy Carbon</h4>
@@ -13,7 +14,7 @@
                 <input type="text" name="organization" id="organization" class="form-control" autocomplete="off">                               
             </div>
             <div class="col-xs-4">
-                <select name="organization-type" id="organization-type" class="form-control">
+                <select name="organization_type" id="organization_type" class="form-control">
                     <option value="company">Company</option>
                     <option value="university">University</option>
                     <option value="individual">Individual</option>
@@ -32,6 +33,15 @@
             <label class="col-xs-3 control-label">Project</label>
             <div class="col-xs-5">
                 <input type="text" name="project" id="project" class="form-control" autocomplete="off">                               
+            </div>
+            <div class="col-xs-4">
+                <select name="project_type" id="project_type" class="form-control">
+                    <option value="solar">Solar</option>
+                    <option value="wind">Wind</option>
+                    <option value="water">Water</option>
+                    <option value="geothermal">Geothermal</option>
+                    <option value="biomass">Biomass</option>
+                </select>
             </div>
         </div>
 
@@ -52,7 +62,7 @@
         <div class="form-group has-feedback">
             <label class="col-xs-3 control-label">Date/Time</label>
             <div id="buyDateTimePicker" class="col-xs-5 input-group date datetimepicker">
-                <input type="text" name="buyDateTime" id="buyDateTime" class="form-control" readonly >
+                <input type="text" name="transDateTime" value="" id="transDateTime" class="form-control" readonly >
                 <span class="input-group-addon">
                     <span class="glyphicon-calendar glyphicon"></span>
                 </span>
@@ -68,8 +78,9 @@
 </form> 
 <script type="text/javascript">
     addDatePicker('buyDateTimePicker');
-    addTypeahead('organization', 'organization');
-    addTypeahead('programme', 'programme');
-    addTypeahead('project', 'project');   
+    addTypeahead('organization', 'organization', 0);
+    //addTypeahead('programme', 'programme');
+    //addTypeahead('project', 'project'); 
+    addEvents();
     saveBuyCarbon();
 </script>

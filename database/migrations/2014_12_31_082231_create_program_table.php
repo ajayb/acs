@@ -15,7 +15,7 @@ class CreateProgramTable extends Migration {
         Schema::create('program', function(Blueprint $table)
         {
             $table->increments('id');
-            $table->integer('organization_id')->unsigned();
+            $table->integer('customer_id')->unsigned();
             $table->string('name', 100);
             $table->boolean('status')->default(1);
             $table->integer('created_by')->unsigned();
@@ -24,7 +24,7 @@ class CreateProgramTable extends Migration {
 
         Schema::table('program', function($table)
         {
-            $table->foreign('organization_id')->references('id')->on('organization');
+            $table->foreign('customer_id')->references('id')->on('customers');
             $table->foreign('created_by')->references('id')->on('users');
         });
     }

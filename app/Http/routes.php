@@ -31,6 +31,9 @@ Route::post('/dashboard/organization', 'DashboardController@organization');
 Route::post('/dashboard/programme', 'DashboardController@programme');
 Route::post('/dashboard/project', 'DashboardController@project');
 
+Route::post('/dashboard/addTransactions', 'DashboardController@addTransactions');
+
+
 Route::controllers([
 	'user' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',

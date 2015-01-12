@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Customers;
+use App\Program;
+use App\Projects;
+use App\Transactions;
 
 class DashboardController extends Controller {
 
@@ -34,7 +39,13 @@ class DashboardController extends Controller {
     {
         $this->title = "Buy Carbon";                
         return view('acs/buy', compact('title'));
-    }        
+    }
+    
+    public function addTransactions(Request $request)
+    {        
+        $this->title = "Add Buy Carbon";                   
+        Transactions::addRecord($request);
+    }
     
     public function sell()
     {
@@ -62,19 +73,19 @@ class DashboardController extends Controller {
     
     public function organization()
     {         
-        $organization = $this->inputdata();
+        $organization = Customers::getCustomers(); 
         return json_encode($organization);
     }
     
-    public function programme()
+    public function programme(Request $request)
     {               
-        $programme = $this->inputdata();
+        $programme = Program::getPrograms($request->id); 
         return json_encode($programme);
     }
     
-    public function project()
+    public function project(Request $request)
     {               
-        $project = $this->inputdata();
+        $project = Projects::getProjects($request->id); 
         return json_encode($project);
     }
     
