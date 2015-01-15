@@ -31,11 +31,7 @@ class CreateOrganizationTable extends Migration {
      *
      * @return void
      */
-    public function down() {
-        Schema::table('organization', function(Blueprint $table) {
-            $table->dropForeign('organization_email_unique');
-        });
-
+    public function down() {        
         Schema::drop('organization');
     }
 

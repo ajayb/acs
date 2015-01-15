@@ -16,10 +16,11 @@ class CreatePhotovoltaicTable extends Migration {
         {
             $table->increments('id');
             $table->integer('project_id')->unsigned();
+            $table->integer('organization_id')->unsigned();
             $table->string('serial_number', 30);
             $table->string('kw_reading', 30);
             $table->string('carbon', 30);
-            $table->dateTime('reading_time');
+            $table->string('reading_time', 30);                   
             $table->integer('created_by')->unsigned();
             $table->timestamps();
         });
@@ -27,6 +28,7 @@ class CreatePhotovoltaicTable extends Migration {
         Schema::table('photovoltaic', function($table)
         {
             $table->foreign('project_id')->references('id')->on('projects');
+            $table->foreign('organization_id')->references('id')->on('organization');
             $table->foreign('created_by')->references('id')->on('users');
         });
     }

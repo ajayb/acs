@@ -1,0 +1,2 @@
+<button class="btn mod-action" data-toggle="modal" data-target="#memberModal"><i class="fa fa-plus"></i> &nbsp;Add Member</button>
+<div class=""><img class="img-responsive" src="img/table.jpg" title="Table"></div>

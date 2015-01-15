@@ -26,39 +26,43 @@ class Customers extends Model {
      * @var array
      */
     protected $hidden = [];
-    
-    public static function getCustomers() {
-        
+
+    public static function getCustomers()
+    {
+
         $organizationId = \Auth::user()->organization_id;
         $matchThese     = ['organization_id' => $organizationId, 'status' => 1];
         $customer       = self::where($matchThese)->get()->toArray();
-        
+
         return $customer;
     }
 
-    public static function getAddCustomer($customerName, $customerType = 'company') {
+    public static function getAddCustomer($customerName, $customerType = 'company', $isNonProfit = 0)
+    {
         //http://stackoverflow.com/questions/19325312/laravel-eloquent-multiple-where
 
         $userId         = \Auth::user()->id;
         $organizationId = \Auth::user()->organization_id;
         $matchThese     = ['name' => $customerName, 'organization_id' => $organizationId, 'status' => 1];
         $customer       = self::where($matchThese)->get()->first();
-       
-        if($customer)
+
+        if ($customer)
         {
             $customer = $customer->toArray();
             return $customer['id'];
-        } else
+        }
+        else
         {
             $customers                  = new Customers();
             $customers->organization_id = $organizationId;
             $customers->name            = $customerName;
             $customers->type            = $customerType;
             $customers->created_by      = $userId;
+            $customers->is_non_profit   = $isNonProfit;
             $customers->created_at      = new \DateTime;
             $customers->updated_at      = new \DateTime;
             $customers->save();
-            
+
             return $customers->id;
         }
     }

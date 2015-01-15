@@ -4,6 +4,15 @@ var projectList = new Object();
 
 $(document).ready(function () {
 
+    $("a[data-target=#acsModal]").click(function (ev) {
+        // ev.preventDefault();
+        var target = $(this).attr("href");
+
+        $("#acsModal .modal-content").load(target, function () {
+            $("#acsModal").modal("show");
+        });
+    });
+
     $('#carbonTabs a').click(function (e) {
         e.preventDefault();
 
@@ -16,10 +25,12 @@ $(document).ready(function () {
         });
     });
 
-// load first tab content
-    $('#brokered_carbon').load($('.active a').attr("data-url"), function (result) {
+    $('#brokered_carbon').load('/dashboard/brokered', function (result) {
         $('.active a').tab('show');
     });
+
+    getAvailableCC();
+
 });
 
 (function ($) {
@@ -29,26 +40,73 @@ $(document).ready(function () {
     };
 }(jQuery));
 
+var getAvailableCC = function () {
+    url = '/dashboard/carbonCredit';
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'json',
+        error: function () {
+        },
+        success: function (jsonData) {
+            $('#availableCarbonCredit').html(jsonData.availableCC);
+        }
+    });
+}
+
+var loadPvDataGrid = function () {
+    url = '/dashboard/pvDataGrid';
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'html',
+        error: function () {
+        },
+        success: function (data) {
+            $('#pvDataGrid').html(data);
+        }
+    });
+}
+
+var removeAcsModal = function () {
+    $('#acsModal').modal('hide');
+    $('body').on('hidden.bs.modal', '.modal', function () {
+        $(this).removeData('bs.modal');
+    });
+}
 
 var addDatePicker = function (boxId) {
-    //http://eonasdan.github.io/bootstrap-datetimepicker/
+
     $('#' + boxId).datetimepicker();
     $('#' + boxId).data("DateTimePicker").setDate(new Date($.now()));
 }
 
 var addEvents = function () {
+
+    $('#acsModal').on('hidden.bs.modal', function () {
+        removeAcsModal();
+    });
+
     $("#organization").on('focusout', function () {
         var orgName = $.trim($(this).val());
         if (orgName != '') {
-            //makeOrganization(orgName);
             makeProgram(orgName);
         }
+
+        if (organizationList[orgName] && organizationList[orgName].type) {
+            $('#organization_type').val(organizationList[orgName].type);
+            $('#organization_type').attr("disabled", true);
+        }
+        else {
+            $('#organization_type').val('company');
+            $('#organization_type').attr("disabled", false);
+        }
+
     });
 
     $("#programme").on('focusout', function () {
         var programName = $.trim($(this).val());
         if (programName != '') {
-            //makeProgram(programName);
             makeProject(programName);
         }
     });
@@ -56,29 +114,50 @@ var addEvents = function () {
     $("#project").on('focusout', function () {
         var projectName = $.trim($(this).val());
         if (projectName != '') {
-            //makeProject(projectName);
+            if (projectList[projectName] && projectList[projectName].type) {
+                $('#project_type').val(projectList[projectName].type);
+                $('#project_type').attr("disabled", true);
+            }
+            else {
+                $('#project_type').val('solar');
+                $('#project_type').attr("disabled", false);
+            }
         }
     });
+
+    $(".cancel").on('click', function () {
+        removeAcsModal();
+    });
+
+
 }
 
-var makeOrganization = function (orgName) {
-    //var orgId = organizationList[orgName] != undefined ? organizationList[orgName].id : 0;    
-    // addTypeahead('organization', 'organization', 0);
+var resetProgram = function () {
+    $('#programme').typeahead('destroy');
+}
+
+var resetProject = function () {
+    $('#project').typeahead('destroy');
 }
 
 var makeProgram = function (orgName) {
-    console.log(orgName);
+    resetProgram();
+    resetProject();
     var orgId = organizationList[orgName] != undefined ? organizationList[orgName].id : 0;
-    addTypeahead('programme', 'programme', orgId);
+    if (orgId) {
+        addTypeahead('programme', 'programme', orgId);
+    }
 }
 
 var makeProject = function (programName) {
-    console.log(programName);
+    resetProject();
     var programId = programList[programName] != undefined ? programList[programName].id : 0;
-    addTypeahead('project', 'project', programId);
+    if (programId) {
+        addTypeahead('project', 'project', programId);
+    }
 }
 
-var addTypeahead = function (boxId, url, id) {
+var addTypeahead = function (boxId, url, id, makeDisable) {
     url = '/dashboard/' + url;
     $.ajax({
         url: url,
@@ -88,13 +167,18 @@ var addTypeahead = function (boxId, url, id) {
         error: function () {
         },
         success: function (jsonData) {
-            var acsItemNames = new Array();
 
+            var acsItemNames = new Array();
             $.each(jsonData, function (index, item)
             {
                 acsItemNames.push(item.name);
                 if (boxId == 'organization') {
                     organizationList[item.name] = item;
+
+                    if (makeDisable == 1) {
+                        $("#organization").focus();
+                        $('#organization_type').attr('disabled', 'disabled');
+                    }
                 }
                 else if (boxId == 'programme') {
                     programList[item.name] = item;
@@ -103,43 +187,41 @@ var addTypeahead = function (boxId, url, id) {
                     projectList[item.name] = item;
                 }
             });
-
-            var typeaheadEle = $('#' + boxId).data('typeahead');
-            if (typeaheadEle) {
-                typeaheadEle.source = [];
-            }
-
- 
+            /*
+             var typeaheadEle = $('#' + boxId).data('typeahead');
+             if (typeaheadEle) {
+             typeaheadEle.source = [];
+             }
+             */
             $('#' + boxId).typeahead('destroy');
+
             $('#' + boxId).typeahead({
-                source: acsItemNames,
-                highlighter: function (item) {
-                    return item;
-                },
-                updater: function (item) {
-                    console.log(boxId + "'" + item + "' selected.");
-
-                    if (boxId == 'organization') {
-                        // makeOrganization(item);
-                        makeProgram(item);
-                    }
-                    else if (boxId == 'programme') {
-                        //makeProgram(item);
-                        makeProject(item);
-                    }
-                    else if (boxId == 'project') {
-                        // makeProject(item);
-                    }
-
-                    return item;
-                }                
+                source: acsItemNames
             });
         }
     });
 }
 
+var addCarbonTransaction = function (formId) {
+    var form_data = $("#" + formId).serialize();
+    $.ajax({
+        url: '/dashboard/addTransactions',
+        type: 'POST',
+        dataType: 'html',
+        data: form_data,
+        error: function () {
+        },
+        success: function (data) {
+            addTypeahead('organization', 'organization', 0);
+            addEvents();
+            removeAcsModal();
+            getAvailableCC();
+        }
+    });
+}
+
 var validateBuyCarbon = function () {
-    //http://twitterbootstrap.org/live/bootstrap-form-validation/
+
     $('#buyCarbonForm').validate({
         rules: {
             organization: {
@@ -167,18 +249,7 @@ var validateBuyCarbon = function () {
 
         },
         submitHandler: function (form) {
-            var form_data = $("#buyCarbonForm").serialize();
-            $.ajax({
-                url: '/dashboard/addTransactions',
-                type: 'POST',
-                dataType: 'html',
-                data: form_data,
-                error: function () {
-                },
-                success: function (data) {
-
-                }
-            });
+            addCarbonTransaction('buyCarbonForm');
         }
     });
 
@@ -187,5 +258,294 @@ var validateBuyCarbon = function () {
 var saveBuyCarbon = function () {
     $('#saveBuyCarbon').click(function (e) {
         validateBuyCarbon();
+    });
+}
+
+
+var validateSellCarbon = function () {
+
+    $('#sellCarbonForm').validate({
+        rules: {
+            organization: {
+                required: true
+            },
+            programme: {
+                required: true
+            },
+            project: {
+                required: true
+            },
+            amount: {
+                required: true,
+                number: true
+            },
+            cost: {
+                required: true,
+                number: true
+            }
+        },
+        highlight: function (element) {
+            $(element).closest('.control-group').removeClass('success').addClass('error');
+        },
+        success: function (element) {
+
+        },
+        submitHandler: function (form) {
+            addCarbonTransaction('sellCarbonForm');
+        }
+    });
+
+}
+
+var saveSellCarbon = function () {
+    $('#saveSellCarbon').click(function (e) {
+        validateSellCarbon();
+    });
+}
+
+
+var validateTransferCarbon = function () {
+    //http://twitterbootstrap.org/live/bootstrap-form-validation/
+    $('#transferCarbonForm').validate({
+        rules: {
+            organization: {
+                required: true
+            },
+            programme: {
+                required: true
+            },
+            project: {
+                required: true
+            },
+            amount: {
+                required: true,
+                number: true
+            },
+            cost: {
+                required: true,
+                number: true
+            }
+        },
+        highlight: function (element) {
+            $(element).closest('.control-group').removeClass('success').addClass('error');
+        },
+        success: function (element) {
+
+        },
+        submitHandler: function (form) {
+            addCarbonTransaction('transferCarbonForm');
+        }
+    });
+
+}
+
+var saveTransferCarbon = function () {
+    $('#saveTransferCarbon').click(function (e) {
+        validateTransferCarbon();
+    });
+}
+
+
+var validateGrantCarbon = function () {
+    $('#grantCarbonForm').validate({
+        rules: {
+            organization: {
+                required: true
+            },
+            programme: {
+                required: true
+            },
+            project: {
+                required: true
+            },
+            amount: {
+                required: true,
+                number: true
+            },
+            cost: {
+                required: true,
+                number: true
+            }
+        },
+        highlight: function (element) {
+            $(element).closest('.control-group').removeClass('success').addClass('error');
+        },
+        success: function (element) {
+
+        },
+        submitHandler: function (form) {
+            addCarbonTransaction('grantCarbonForm');
+        }
+    });
+
+}
+
+var saveGrantCarbon = function () {
+    $('#saveGrantCarbon').click(function (e) {
+        validateGrantCarbon();
+    });
+}
+
+var validateParkCarbon = function () {
+    $('#parkCarbonForm').validate({
+        rules: {
+            organization: {
+                required: true
+            },
+            programme: {
+                required: true
+            },
+            project: {
+                required: true
+            },
+            amount: {
+                required: true,
+                number: true
+            },
+            cost: {
+                required: true,
+                number: true
+            }
+        },
+        highlight: function (element) {
+            $(element).closest('.control-group').removeClass('success').addClass('error');
+        },
+        success: function (element) {
+
+        },
+        submitHandler: function (form) {
+            addCarbonTransaction('parkCarbonForm');
+        }
+    });
+
+}
+
+var saveParkCarbon = function () {
+    $('#saveParkCarbon').click(function (e) {
+        validateParkCarbon();
+    });
+}
+
+var addPvData = function (formId) {
+    var form_data = $("#" + formId).serialize();
+    $.ajax({
+        url: '/dashboard/addPvData',
+        type: 'POST',
+        dataType: 'html',
+        data: form_data,
+        error: function () {
+        },
+        success: function (data) {
+            addTypeahead('organization', 'organization', 0);
+            addEvents();
+            removeAcsModal();
+            loadPvDataGrid();
+            getAvailableCC();
+        }
+    });
+}
+
+var validatePvData = function () {
+
+    $('#addPvDataForm').validate({
+        rules: {
+            organization: {
+                required: true
+            },
+            programme: {
+                required: true
+            },
+            project: {
+                required: true
+            },
+            serialNumber: {
+                required: true
+            },
+            kwReading: {
+                required: true,
+                number: true
+            },
+            carbon: {
+                required: true,
+                number: true
+            },
+            cost: {
+                required: true,
+                number: true
+            }
+        },
+        highlight: function (element) {
+            $(element).closest('.control-group').removeClass('success').addClass('error');
+        },
+        success: function (element) {
+
+        },
+        submitHandler: function (form) {
+            addPvData('addPvDataForm');
+        }
+    });
+
+}
+
+var savePvData = function () {
+    $('#savePvData').click(function (e) {
+        validatePvData();
+    });
+}
+
+var loadOrgDataGrid = function () {
+    url = '/dashboard/organizationDataGrid';
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'html',
+        error: function () {
+        },
+        success: function (data) {
+            $('#orgDataGrid').html(data);
+        }
+    });
+}
+
+var addOrgData = function (formId) {
+    var form_data = $("#" + formId).serialize();
+    $.ajax({
+        url: '/dashboard/addOrganization',
+        type: 'POST',
+        dataType: 'html',
+        data: form_data,
+        error: function () {
+        },
+        success: function (data) {
+            removeAcsModal();
+            loadOrgDataGrid();
+        }
+    });
+}
+
+var validateOrgData = function () {
+
+    $('#addOrgDataForm').validate({
+        rules: {
+            organization: {
+                required: true
+            }
+        },
+        highlight: function (element) {
+            $(element).closest('.control-group').removeClass('success').addClass('error');
+        },
+        success: function (element) {
+
+        },
+        submitHandler: function (form) {
+            addOrgData('addOrgDataForm');
+        }
+    });
+
+}
+
+var saveOrgData = function () {
+    $('#saveOrgData').click(function (e) {
+        validateOrgData();
     });
 }

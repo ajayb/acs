@@ -11,6 +11,7 @@ return array(
     'CreateOrganizationTable' => $baseDir . '/database/migrations/2014_12_30_103721_create_organization_table.php',
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_12_31_100000_create_password_resets_table.php',
     'CreatePhotovoltaicTable' => $baseDir . '/database/migrations/2015_01_05_085539_create_photovoltaic_table.php',
+    'CreatePhotovoltaicTransactionsTable' => $baseDir . '/database/migrations/2015_01_14_100642_create_photovoltaic_transactions_table.php',
     'CreateProgramTable' => $baseDir . '/database/migrations/2014_12_31_082231_create_program_table.php',
     'CreateProjectsTable' => $baseDir . '/database/migrations/2014_12_31_082241_create_projects_table.php',
     'CreateRolesTable' => $baseDir . '/database/migrations/2014_12_30_082257_create_roles_table.php',

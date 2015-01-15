@@ -2,85 +2,121 @@
     <input type="hidden" id="_token" name="_token" value="{{csrf_token()}}">
     <input type="hidden" id="addType" name="addType" value="buy">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">Buy Carbon</h4>
-    </div>			
-    <!-- /modal-header -->
-    <div class="modal-body">
-
-        <div class="form-group has-feedback">
-            <label class="col-xs-3 control-label">Organization</label>
-            <div class="col-xs-5">
-                <input type="text" name="organization" id="organization" class="form-control" autocomplete="off">                               
-            </div>
-            <div class="col-xs-4">
-                <select name="organization_type" id="organization_type" class="form-control">
-                    <option value="company">Company</option>
-                    <option value="university">University</option>
-                    <option value="individual">Individual</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="form-group has-feedback">
-            <label class="col-xs-3 control-label">Programme</label>
-            <div class="col-xs-5">
-                <input type="text" name="programme" id="programme" class="form-control" autocomplete="off">                                
-            </div>
-        </div> 
-
-        <div class="form-group has-feedback">
-            <label class="col-xs-3 control-label">Project</label>
-            <div class="col-xs-5">
-                <input type="text" name="project" id="project" class="form-control" autocomplete="off">                               
-            </div>
-            <div class="col-xs-4">
-                <select name="project_type" id="project_type" class="form-control">
-                    <option value="solar">Solar</option>
-                    <option value="wind">Wind</option>
-                    <option value="water">Water</option>
-                    <option value="geothermal">Geothermal</option>
-                    <option value="biomass">Biomass</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="form-group has-feedback">
-            <label class="col-xs-3 control-label">Amount #</label>
-            <div class="col-xs-5">
-                <input type="text" name="amount" id="amount" class="form-control" autocomplete="off">                               
-            </div>
-        </div>
-
-        <div class="form-group has-feedback">
-            <label class="col-xs-3 control-label">Cost $</label>
-            <div class="col-xs-5">
-                <input type="text" name="cost" id="cost"  class="form-control" autocomplete="off">                                
-            </div>
-        </div>
-
-        <div class="form-group has-feedback">
-            <label class="col-xs-3 control-label">Date/Time</label>
-            <div id="buyDateTimePicker" class="col-xs-5 input-group date datetimepicker">
-                <input type="text" name="transDateTime" value="" id="transDateTime" class="form-control" readonly >
-                <span class="input-group-addon">
-                    <span class="glyphicon-calendar glyphicon"></span>
-                </span>
-            </div>
-        </div>
-
-    </div>			
-    <!-- /modal-body -->
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" id="saveBuyCarbon">Save changes</button>
+        <button type="button" class="close cancel" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title" id="simpleModalLabel">Buy</h4>
     </div>
-</form> 
+    <div class="modal-body">
+        <form class="form-horizontal form-bordered form-banded" role="form">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="form-group">
+                        <div class="col-md-4 col-sm-3">
+                            <label for="email2" class="control-label">Organization</label>
+                        </div>
+                        <div class="col-md-8 col-sm-9">                            
+                            <input type="text" name="organization" id="organization" class="form-control" autocomplete="off" placeholder="Organization">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-9">
+                            <select name="organization_type" id="organization_type" class="form-control">
+                                @foreach($organizationType as $key => $val)
+                                <option value="{{$key}}">{{$val}}</option>                                
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="form-group">
+                        <div class="col-md-4 col-sm-3">
+                            <label for="email2" class="control-label">Program</label>
+                        </div>
+                        <div class="col-md-8 col-sm-9">                            
+                            <input type="text" name="programme" id="programme" class="form-control" autocomplete="off" placeholder="Program">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4"> </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="form-group">
+                        <div class="col-md-4 col-sm-3">
+                            <label for="email2" class="control-label">Project</label>
+                        </div>
+                        <div class="col-md-8 col-sm-9">                            
+                            <input type="text" name="project" id="project" class="form-control" autocomplete="off" placeholder="Project"> 
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-9">
+                            <select name="project_type" id="project_type" class="form-control">
+                                @foreach($projectType as $key => $val)
+                                <option value="{{$key}}">{{$val}}</option>                                
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="form-group">
+                        <div class="col-md-4 col-sm-3">
+                            <label for="email2" class="control-label">Amount (#)</label>
+                        </div>
+                        <div class="col-md-8 col-sm-9">                            
+                            <input type="text" name="amount" id="amount" class="form-control" autocomplete="off" placeholder="Total Carbon in Metric Tonnes"> 
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4"> </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="form-group">
+                        <div class="col-md-4 col-sm-3">
+                            <label for="email2" class="control-label">Cost ($)</label>
+                        </div>
+                        <div class="col-md-8 col-sm-9">                            
+                            <input type="text" name="cost" id="cost"  class="form-control" autocomplete="off" placeholder="Cost">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4"> </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="form-group">
+                        <div class="col-md-4 col-sm-3">
+                            <label for="email2" class="control-label">Date/Time</label>
+                        </div>
+                        <div id="buyDateTimePicker" class="col-md-8 col-sm-9 input-group control-width-normal date datetimepicker">
+                            <input type="text" name="transDateTime" value="" id="transDateTime" class="form-control" readonly >
+                            <span class="input-group-addon">
+                                <span class="glyphicon-calendar glyphicon"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4"> </div>
+            </div>    
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn mod-action" id="saveBuyCarbon">Save</button>        
+        <button type="button" class="btn cancel" data-dismiss="modal">Cancel</button>
+    </div>
+</form>
 <script type="text/javascript">
     addDatePicker('buyDateTimePicker');
-    addTypeahead('organization', 'organization', 0);
-    //addTypeahead('programme', 'programme');
-    //addTypeahead('project', 'project'); 
+    addTypeahead('organization', 'organization', 0, 0);
     addEvents();
-    saveBuyCarbon();
+    saveBuyCarbon();   
 </script>

@@ -34,8 +34,7 @@ class AcsAuth implements Middleware {
      * @return mixed
      */
     public function handle($request, Closure $next)
-    {
-        
+    {       
         if ($this->auth->check() && app('session')->get('assignedRoles') == null)
         {            
             $assignedRoles = array();

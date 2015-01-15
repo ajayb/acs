@@ -7,79 +7,110 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <meta name="csrf-token" content={{csrf_token()}}>
-
         <!-- Application Title -->
         <title>
             @section('title')
-                Adaptive Carbon Systems
+            Adaptive Carbon Systems
             @show
         </title>
 
-        <!-- Bootstrap CSS -->
-        <link href="/css/app.css" rel="stylesheet">
-        <link href="/css/vendor/font-awesome.css" rel="stylesheet">
+        <link href="/css/bootstrap.min.css" rel="stylesheet">        
         <link href="/css/vendor/bootstrap-datetimepicker.min.css" rel="stylesheet">
+        <link href="/css/table.css" rel="stylesheet">        
+        <link href="/css/carbon.css" rel="stylesheet">
+        <link href="/css/custom.css" rel="stylesheet">                
+        <link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">        
         <link href="/css/vendor/typeahead.css" rel="stylesheet">
 
-        <!-- Web Fonts -->
-        <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
-
-        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
-                <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-                <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
+                <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+                <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+            <![endif]-->
     </head>
-    <body>
-        <!-- Static navbar -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                        <span class="sr-only">Toggle Navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="/">Laravel</a>
-                </div>
 
-                <div id="navbar" class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li><a href="/">Home</a></li>
-                    </ul>
-
+    <body id="page-top" class="index">      
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="">               
+                <div class="navbar-header page-scroll ">
                     @if (Auth::check())
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <img src="https://www.gravatar.com/avatar/{{{ md5(strtolower(Auth::user()->email)) }}}?s=35" height="35" width="35" class="navbar-avatar">
-                                {{ Auth::user()->name }} <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="/user/logout"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    @else
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="/user/login"><i class="fa fa-btn fa-sign-in"></i>Login</a></li>
-                        <li><a href="/user/register"><i class="fa fa-btn fa-user"></i>Register</a></li>
-                    </ul>
+                    <div class="container">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> 
+                            <span class="sr-only">Toggle navigation</span> 
+                            <span class="icon-bar"></span> 
+                            <span class="icon-bar"></span> 
+                            <span class="icon-bar"></span> 
+                        </button>
+                        <a class=" navbar-brand page-scroll" href="#page-top"><img src="/img/carbonLOGO.png" alt="Carbon Credit"></a>
+                        <div class="userarea">Welcome <span class="username">{{ Auth::user()->name }}</span><br>
+                            <a href="/user/logout"> Logout</a> 
+                        </div>
+                    </div>                    
                     @endif
+                </div> 
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <div class="container">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="hidden"> <a href="#page-top"></a> </li>
+                            <li>
+                                <button class="btn btn-primary clsClear" data-toggle="modal" href="/dashboard/buy" data-target="#acsModal">Buy</button>
+                            </li>
+                            <li>
+                                <button class="btn btn-primary clsClear" data-toggle="modal" href="/dashboard/sell" data-target="#acsModal">Sell</button>
+                            </li>
+                            <li>
+                                <button class="btn btn-primary clsClear" data-toggle="modal" href="/dashboard/transfer" data-target="#acsModal">Transfer</button>
+                            </li>
+                            <li>
+                                <button class="btn btn-primary clsClear" data-toggle="modal" href="/dashboard/grant" data-target="#acsModal">Grant</button>
+                            </li>
+                            <li>
+                                <button class="btn btn-primary clsClear" data-toggle="modal" href="/dashboard/park" data-target="#acsModal">Park</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>                
+            </div>            
+        </nav>
+        <section id="services">
+            <div class="container">
+                <div class="row" >
+                    <div class="col-lg-12">
+                        <h2 class="section-heading">My Available Carbon Credits: <span id="availableCarbonCredit">0</span></h2>
+                    </div>
+                </div>
+                @yield('content')
+        </section>
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6"> <span class="copyright">Copyright &copy; Carbon Credit 2015</span> </div>
+                    <div class="col-md-6">
+                        <ul class="list-inline quicklinks">
+                            <li><a href="#">Privacy Policy</a> </li>
+                            <li><a href="#">Terms of Use</a> </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </nav>
+        </footer>         
 
-        @yield('content')
+        <div class="modal fade" id="acsModal" tabindex="-1" role="dialog" aria-labelledby="AcsCarbon" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content"></div>
+            </div>   
+        </div>
 
-        <!-- Bootstrap JavaScript -->
         <script type="text/javascript" src="/js/vendor/jquery-1.11.0.min.js"></script>
         <script type="text/javascript" src="/js/vendor/bootstrap.js"></script>        
         <script type="text/javascript" src="/js/vendor/moment.min.js"></script>
         <script type="text/javascript" src="/js/vendor/bootstrap-datetimepicker.js"></script>        
         <script type="text/javascript" src="/js/vendor/bootstrap3-typeahead.js"></script>
-        <script type="text/javascript" src="/js/vendor/jquery.validate.js"></script>
+        <script type="text/javascript" src="/js/vendor/jquery.validate.js"></script>       
+        <script type="text/javascript" src="/js/vendor/jquery.easing.min.js"></script> 
         <script type="text/javascript" src="/js/acs.js"></script>
+        <script type="text/javascript" src="/js/agency.js"></script>
     </body>
 </html>
